@@ -16,13 +16,23 @@ model User {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   description String?
   price       Float
   imageUrl    String?
 
+  categoryId  Int
+  categoryInfo    Category @relation(fields: [categoryId], references: [id])
   orderItems  OrderItem[]
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  imageUrl String
+
+  products Product[]
 }
 
 model Order {
@@ -33,7 +43,6 @@ model Order {
   createdAt    DateTime  @default(now())
   locationUrl  String
   phoneNumber  String
-
   orderItems   OrderItem[]
 }
 
