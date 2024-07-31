@@ -9,7 +9,7 @@ const { swaggerUi, specs } = require('./swagger');
 const { env } = require('process');
 
 const corsOptions = {
-  origin: 'http://' + config.SERVER_IP + '/',
+  // origin: 'http://' + config.SERVER_IP + '/',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
