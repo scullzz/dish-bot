@@ -3,9 +3,12 @@ const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const config = require('./config');
 const telegramBot = require('./telegram');
+const cors = require('cors');
+
 const { swaggerUi, specs } = require('./swagger');
 
 const app = express();
+app.use(cors);
 app.use(bodyParser.json());
 
 // Middleware для проверки пользователей Telegram
