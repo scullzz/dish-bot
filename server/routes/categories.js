@@ -9,7 +9,6 @@ const prisma = require('../prisma');
  *   description: Управление категориями
  */
 
-
 /**
  * @swagger
  * /api/categories:
@@ -18,13 +17,13 @@ const prisma = require('../prisma');
  *     tags: [Categories]
  *     responses:
  *       200:
- *         description: Список всех продуктов
+ *         description: Список всех категорий
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Product'
+ *                 $ref: '#/components/schemas/Category'
  *       500:
  *         description: Внутренняя ошибка сервера
  */
@@ -37,14 +36,32 @@ router.get('/', async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /api/categories/products:
+ *   get:
+ *     summary: Получение списка категорий с продуктами
+ *     tags: [Categories]
+ *     responses:
+ *       200:
+ *         description: Список категорий с их продуктами
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Category'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
 router.get('/products', async(req, res) => {
-    try{
+    try {
         const categories = await prisma.category.findMany({
             include: { products: true },
         });
         res.json(categories);
-    } catch(error){
-        res.status(500).json({success: false, error: error.message});
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
     }
 })
 

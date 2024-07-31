@@ -13,7 +13,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://185.189.167.220:${config.PORT}`,
+        url: `http://${config.SERVER_IP}:${config.PORT}`,
       },
     ],
     components: {
@@ -59,6 +59,9 @@ const options = {
               type: 'string',
               description: 'Ссылка на изображение продукта',
             },
+            categoryInfo: {
+              $ref: '#/components/schemas/Category'
+            }
           },
         },
         Order: {
@@ -136,7 +139,7 @@ const options = {
             products:{
               type: 'array',
               items:{
-                $ref: '#/components/schemas/Category',
+                $ref: '#/components/schemas/Product',
               },
             }
           }
