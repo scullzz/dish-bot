@@ -13,7 +13,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${config.PORT}`,
+        url: `http://185.189.167.220:${config.PORT}`,
       },
     ],
     components: {
