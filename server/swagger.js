@@ -13,7 +13,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${config.PORT}`,
+        url: `http://${config.SERVER_IP}:${config.PORT}`,
       },
     ],
     components: {
@@ -59,6 +59,9 @@ const options = {
               type: 'string',
               description: 'Ссылка на изображение продукта',
             },
+            categoryInfo: {
+              $ref: '#/components/schemas/Category'
+            }
           },
         },
         Order: {
@@ -118,6 +121,29 @@ const options = {
             },
           },
         },
+        Category:{
+          type: 'object',
+          properties:{
+            id:{
+              type: 'integer',
+              description: 'ID категории',
+            },
+            name:{
+              type: 'string',
+              description: 'Название категории',
+            },
+            imageUrl:{
+              type: 'string',
+              description: 'Ссылка на источник изображения',
+            },
+            products:{
+              type: 'array',
+              items:{
+                $ref: '#/components/schemas/Product',
+              },
+            }
+          }
+        }
       },
     },
   },

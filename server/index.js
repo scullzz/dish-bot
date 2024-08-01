@@ -3,9 +3,19 @@ const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const config = require('./config');
 const telegramBot = require('./telegram');
+const cors = require('cors');
+
 const { swaggerUi, specs } = require('./swagger');
+const { env } = require('process');
+
+const corsOptions = {
+  // origin: 'http://' + config.SERVER_IP + '/',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 const app = express();
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // Middleware для проверки пользователей Telegram
@@ -26,6 +36,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/orders', require('./routes/orders'));
+app.use('/api/categories', require('./routes/categories'));
 
 // Настройка Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
