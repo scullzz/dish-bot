@@ -1,6 +1,9 @@
 const TelegramBot = require('node-telegram-bot-api');
 const config = require('./config');
 const prisma = require('./prisma');
+const { text } = require('body-parser');
+
+const webAppUrl = 'https://www.google.com/'
 
 const bot = new TelegramBot(config.TELEGRAM_TOKEN, { polling: true });
 
@@ -15,15 +18,20 @@ bot.onText(/\/start/, async (msg) => {
       update: { name },
       create: { telegramId: BigInt(telegramId), name },
     });
-    bot.sendMessage(chatId, 'Добро пожаловать в наш сервис доставки еды!');
+    await bot.sendMessage(chatId, 'Добро пожаловать в наш сервис доставки еды!', {
+      reply_markup: {
+        inline_keyboard: [
+          [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
+        ],
+      }
+    });
   } catch (error) {
-    bot.sendMessage(chatId, 'Произошла ошибка при регистрации.');
+    await bot.sendMessage(chatId, 'Произошла ошибка при регистрации.');
   }
 });
 
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
-  // Добавьте логику обработки сообщений здесь
 });
 
 module.exports = bot;
