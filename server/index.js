@@ -49,14 +49,14 @@ app.use('/api/categories', require('./routes/categories'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Запуск HTTPS сервера на порту 6969
-https.createServer(options, app).listen(80, () => {
-  console.log('HTTPS сервер запущен на порту 6969');
-});
+// https.createServer(options, app).listen(80, () => {
+//   console.log('HTTPS сервер запущен на порту 80');
+// });
 
 // Создайте HTTP сервер для перенаправления на HTTPS на порту 80
 http.createServer((req, res) => {
   // res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
   // res.end();
 }).listen(6969, () => {
-  console.log('HTTP сервер запущен на порту 80 для перенаправления на HTTPS');
+  console.log('HTTP сервер запущен на порту 6969 для перенаправления на HTTPS');
 });
