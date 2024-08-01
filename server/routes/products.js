@@ -31,6 +31,7 @@ router.get('/', async (req, res) => {
   try {
     const products = await prisma.product.findMany({
       include: { categoryInfo: true },
+      orderBy: { categoryId: 'asc' }
     });
     res.json(products);
   } catch (error) {
@@ -67,7 +68,7 @@ router.get('/category/:category_id', async (req, res) => {
   const {category_id} = req.params;
   try {
     const products = await prisma.product.findMany({
-      where: { id: parseInt(category_id) },
+      where: { categoryId: parseInt(category_id) },
       include: {categoryInfo: true },
     });
     res.json(products);
