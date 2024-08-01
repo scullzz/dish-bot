@@ -7,7 +7,9 @@ import {
   decrease,
   createOrder,
 } from "../../slice/itemsSlice";
+import { useNavigate } from "react-router-dom";
 const Order = () => {
+  const nav = useNavigate();
   const list = useSelector((item) => item.items.list);
   const totalPrice = useSelector((item) => item.items.price);
   const orderList = useSelector((item) => item.items.orderList);
@@ -50,7 +52,17 @@ const Order = () => {
   return (
     <div className={styles.cart}>
       <div className={styles.cartHeader}>
-        <h2>Корзина</h2>
+        <div className={styles.flex}>
+          <button
+            className={styles.backButton}
+            onClick={() => {
+              nav("/");
+            }}
+          >
+            <span className={styles.arrow}></span>
+          </button>
+          <h2>Корзина</h2>
+        </div>
         <button onClick={() => ClearShopCart()} className={styles.clearCart}>
           Очистить корзину
         </button>
