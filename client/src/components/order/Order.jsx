@@ -1,20 +1,52 @@
 import React, { useEffect, useState } from "react";
 import styles from "./style.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteItem, addItem, clearCart } from "../../slice/itemsSlice";
+import {
+  clearCart,
+  increase,
+  decrease,
+  createOrder,
+} from "../../slice/itemsSlice";
 const Order = () => {
   const list = useSelector((item) => item.items.list);
   const totalPrice = useSelector((item) => item.items.price);
+  const orderList = useSelector((item) => item.items.orderList);
   const dispatch = useDispatch();
+
+  const MakeOrder = async () => {
+    const response = await fetch("http://185.189.167.220:6969/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id: 111,
+        items: orderList,
+        locationUrl: "blabla",
+        phoneNumber: "123123123",
+      }),
+    });
+
+    if (response.ok) {
+      alert("cool");
+    }
+  };
 
   const ClearShopCart = () => {
     dispatch(clearCart());
   };
 
-  useEffect(() => {
-    console.log(list);
-    console.log(totalPrice);
-  }, []);
+  const Decrease = (item) => {
+    dispatch(decrease(item));
+  };
+
+  const Increase = (item) => {
+    dispatch(increase(item));
+  };
+
+  const GenerateOrder = () => {
+    dispatch(createOrder());
+  };
   return (
     <div className={styles.cart}>
       <div className={styles.cartHeader}>
@@ -24,8 +56,8 @@ const Order = () => {
         </button>
       </div>
 
-      {list.map((item) => (
-        <div key={item.id} className={styles.cartItem}>
+      {list.map((item, index) => (
+        <div key={index} className={styles.cartItem}>
           <img className={styles.itemImage} src={item.imageUrl} alt="#" />
           <div className={styles.columnFlex}>
             <div className={styles.itemDetails}>
@@ -37,9 +69,19 @@ const Order = () => {
                 <span>{item.price} сум</span>
               </div>
               <div className={styles.itemQuantity}>
-                <button className={styles.quantityBtn}>-</button>
-                <span>1</span>
-                <button className={styles.quantityBtn}>+</button>
+                <button
+                  onClick={() => Decrease(item)}
+                  className={styles.quantityBtn}
+                >
+                  -
+                </button>
+                <span> {item.quantity} </span>
+                <button
+                  onClick={() => Increase(item)}
+                  className={styles.quantityBtn}
+                >
+                  +
+                </button>
               </div>
             </div>
           </div>
@@ -56,7 +98,9 @@ const Order = () => {
           <span>{totalPrice} сум</span>
         </div>
       </div>
-      <button className={styles.checkoutBtn}>Оформить заказ</button>
+      <button onClick={() => GenerateOrder()} className={styles.checkoutBtn}>
+        Оформить заказ
+      </button>
     </div>
   );
 };
