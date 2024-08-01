@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./style.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,6 +8,7 @@ import {
   createOrder,
 } from "../../slice/itemsSlice";
 import { useNavigate } from "react-router-dom";
+
 const Order = () => {
   const nav = useNavigate();
   const list = useSelector((item) => item.items.list);
@@ -16,21 +17,36 @@ const Order = () => {
   const dispatch = useDispatch();
 
   const MakeOrder = async () => {
-    const response = await fetch("http://185.189.167.220:6969/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      const orderData = {
         user_id: 111,
         items: orderList,
         locationUrl: "blabla",
         phoneNumber: "123123123",
-      }),
-    });
-
-    if (response.ok) {
-      alert("cool");
+      };
+  
+      console.log("Sending order data:", orderData);
+  
+      const response = await fetch("http://185.189.167.220:6969/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      if (response.ok) {
+        alert("Order placed successfully!");
+        ClearShopCart();
+        nav("/"); // Navigate to another page if needed
+      } else {
+        const errorData = await response.json();
+        console.error("Order creation failed:", errorData);
+        alert("Failed to place order. Please try again.");
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert("Failed to place order. Please try again.");
     }
   };
 
@@ -48,7 +64,9 @@ const Order = () => {
 
   const GenerateOrder = () => {
     dispatch(createOrder());
+    MakeOrder();
   };
+
   return (
     <div className={styles.cart}>
       <div className={styles.cartHeader}>

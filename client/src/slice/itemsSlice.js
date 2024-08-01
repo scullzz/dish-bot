@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const itemsSlice = createSlice({
   name: "items",
   initialState: {
-    orderList: [{}],
-    list: [{}],
+    orderList: [],
+    list: [],
     price: 0,
   },
   reducers: {
@@ -15,8 +15,9 @@ const itemsSlice = createSlice({
       }));
     },
     addItem: (state, action) => {
-      state.list.push({ ...action.payload, quantity: 1 });
-      state.price += action.payload.price;
+      const item = { ...action.payload, quantity: 1 };
+      state.list.push(item);
+      state.price += item.price;
     },
     increase: (state, action) => {
       const item = state.list.find((item) => item.id === action.payload.id);
@@ -31,19 +32,16 @@ const itemsSlice = createSlice({
         item.quantity -= 1;
         state.price -= item.price;
         if (item.quantity === 0) {
-          state.list = state.list.filter(
-            (item) => item.id !== action.payload.id
-          );
+          state.list = state.list.filter((i) => i.id !== item.id);
         }
       }
     },
     deleteItem: (state, action) => {
-      const index = state.list.findIndex(
-        (item) => item.title === action.payload.title
-      );
-      if (index !== -1) {
-        state.price -= state.list[index].price;
-        state.list.splice(index, 1);
+      const itemIndex = state.list.findIndex((item) => item.id === action.payload.id);
+      if (itemIndex !== -1) {
+        const item = state.list[itemIndex];
+        state.price -= item.price * item.quantity;
+        state.list.splice(itemIndex, 1);
       }
     },
     clearCart: (state) => {
