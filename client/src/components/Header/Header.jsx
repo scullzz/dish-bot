@@ -6,7 +6,7 @@ const Header = forwardRef(({ selectedCategory, onCategoryClick }, ref) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get('http://185.189.167.220:6969/api/categories/products')
+    axios.get('https://pluswibe.space/api/categories/products')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Error fetching categories:', error));
   }, []);

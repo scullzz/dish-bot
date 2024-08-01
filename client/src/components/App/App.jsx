@@ -11,7 +11,7 @@ const App = () => {
   const headerRef = useRef(null);
 
   useEffect(() => {
-    axios.get('http://185.189.167.220:6969/api/categories/products')
+    axios.get('https://pluswibe.space/api/categories/products')
       .then(response => {
         setCategories(response.data);
         if (response.data.length > 0) {
