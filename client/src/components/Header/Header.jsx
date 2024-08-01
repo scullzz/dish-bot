@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, forwardRef } from 'react';
 import { AppBar, Tabs, Tab, Box, Avatar, Typography } from '@mui/material';
 import axios from 'axios';
 
-const Header = () => {
+const Header = forwardRef(({ selectedCategory, onCategoryClick }, ref) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get('http://185.189.167.220:6969/api/categories')
+    axios.get('http://185.189.167.220:6969/api/categories/products')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Error fetching categories:', error));
   }, []);
 
+  const handleCategoryClick = (categoryId) => {
+    onCategoryClick(categoryId);
+  };
+
   return (
-    <AppBar position="static" color="default" sx={{ boxShadow: 'none', backgroundColor: 'white' }}>
+    <AppBar ref={ref} position="fixed" color="default" sx={{ boxShadow: 'none', backgroundColor: 'white', zIndex: 1100 }}>
       <Box sx={{ overflowX: 'auto' }}>
         <Tabs
-          value={0}
+          value={selectedCategory || false} // Ensure valid value for Tabs
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable categories"
@@ -33,12 +37,14 @@ const Header = () => {
                   </Typography>
                 </Box>
               }
+              value={category.id}
+              onClick={() => handleCategoryClick(category.id)}
             />
           ))}
         </Tabs>
       </Box>
     </AppBar>
   );
-};
+});
 
 export default Header;
