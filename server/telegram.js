@@ -3,7 +3,7 @@ const config = require('./config');
 const prisma = require('./prisma');
 const { text } = require('body-parser');
 
-const webAppUrl = 'https://www.google.com/'
+const webAppUrl = 'https://pluswibe.space/'
 
 const bot = new TelegramBot(config.TELEGRAM_TOKEN, { polling: true });
 
