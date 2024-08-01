@@ -4,8 +4,16 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 const ProductCard = ({ product, count, onAdd, onRemove }) => {
+  const truncateDescription = (description) => {
+    const maxLength = 20; // Adjust the max length as needed
+    if (description.length > maxLength) {
+      return description.substring(0, maxLength) + '...';
+    }
+    return description;
+  };
+
   return (
-    <Card sx={{ boxShadow: 'none', border: 'none', position: 'relative' }}>
+    <Card sx={{ boxShadow: 'none', border: 'none', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
       <CardMedia
         component="img"
         height="100"
@@ -13,18 +21,19 @@ const ProductCard = ({ product, count, onAdd, onRemove }) => {
         alt={product.name}
         sx={{ objectFit: 'contain' }}
       />
-      <CardContent>
-        <Typography variant="h6" sx={{ fontSize: '1rem' }}>{product.name}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          {product.description}
-        </Typography>
-        <Typography variant="h5" color="primary" sx={{ fontSize: '1rem', color: 'black' }}>
-          {product.price} сум
-        </Typography>
+      <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Box>
+          <Typography variant="h6" sx={{ fontSize: '1rem' }}>{product.name}</Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ height: '60px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {truncateDescription(product.description)}
+          </Typography>
+          <Typography variant="h5" color="primary" sx={{ fontSize: '1rem', color: 'black' }}>
+            {product.price} сум
+          </Typography>
+        </Box>
         {count === 0 ? (
           <Button
             variant="contained"
-            color="primary"
             size="small"
             sx={{ marginTop: '10px', backgroundColor: 'black', color: 'white', '&:active': { backgroundColor: 'gray' } }}
             onClick={onAdd}
@@ -38,6 +47,7 @@ const ProductCard = ({ product, count, onAdd, onRemove }) => {
               sx={{ 
                 color: 'white', 
                 backgroundColor: 'black', 
+                '&:hover': { backgroundColor: 'black' },
                 '&:active': { backgroundColor: 'gray' },
                 position: 'absolute',
                 left: 0,
@@ -54,6 +64,7 @@ const ProductCard = ({ product, count, onAdd, onRemove }) => {
               sx={{ 
                 color: 'white', 
                 backgroundColor: 'black', 
+                '&:hover': { backgroundColor: 'black' },
                 '&:active': { backgroundColor: 'gray' },
                 position: 'absolute',
                 right: 0,
