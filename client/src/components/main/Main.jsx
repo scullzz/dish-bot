@@ -13,7 +13,7 @@ const Main = () => {
         "Content-Type": "application/json",
       },
     });
-
+ 
     if (response.ok) {
       const data = await response.json();
       data.forEach((item) => {

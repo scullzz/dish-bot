@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
-import { Grid, Typography, Box } from '@mui/material';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Grid, Typography, Box, Button } from '@mui/material';
 import ProductCard from '../ProductCard/ProductCard';
+import { addItem, increase, decrease, deleteItem, clearCart } from '../../slice/itemsSlice';
+import { selectProductCounts, selectTotalPrice } from '../../slice/selectors';
 
-const ProductGrid = ({ category, onAddToCart, onRemoveFromCart }) => {
-  const [productCounts, setProductCounts] = useState({});
+const ProductGrid = ({ category }) => {
+  const dispatch = useDispatch();
+  const productCounts = useSelector(selectProductCounts);
+  const totalPrice = useSelector(selectTotalPrice);
 
-  const handleAdd = (productId) => {
-    setProductCounts((prevCounts) => ({
-      ...prevCounts,
-      [productId]: (prevCounts[productId] || 0) + 1,
-    }));
-    onAddToCart();
+  const handleAdd = (product) => {
+    if (productCounts[product.id]) {
+      dispatch(increase(product));
+    } else {
+      dispatch(addItem(product));
+    }
   };
 
-  const handleRemove = (productId) => {
-    setProductCounts((prevCounts) => {
-      const newCounts = { ...prevCounts };
-      if (newCounts[productId] > 0) {
-        newCounts[productId] -= 1;
-        onRemoveFromCart();
-      }
-      return newCounts;
-    });
+  const handleRemove = (product) => {
+    if (productCounts[product.id] > 1) {
+      dispatch(decrease(product));
+    } else {
+      dispatch(deleteItem(product));
+    }
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
   };
 
   return (
@@ -35,8 +41,8 @@ const ProductGrid = ({ category, onAddToCart, onRemoveFromCart }) => {
             <ProductCard
               product={product}
               count={productCounts[product.id] || 0}
-              onAdd={() => handleAdd(product.id)}
-              onRemove={() => handleRemove(product.id)}
+              onAdd={() => handleAdd(product)}
+              onRemove={() => handleRemove(product)}
             />
           </Grid>
         ))}
