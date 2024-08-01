@@ -19,7 +19,7 @@ const Order = () => {
   const MakeOrder = async () => {
     try {
       const orderData = {
-        user_id: 111,
+        user_id:  123,
         items: orderList,
         locationUrl: "blabla",
         phoneNumber: "123123123",
@@ -27,7 +27,7 @@ const Order = () => {
   
       console.log("Sending order data:", orderData);
   
-      const response = await fetch("http://185.189.167.220:6969/api/orders", {
+      const response = await fetch("https://pluswibe.space/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
