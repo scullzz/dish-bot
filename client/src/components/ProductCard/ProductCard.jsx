@@ -8,7 +8,7 @@ const ProductCard = ({ product, count, onAdd, onRemove }) => {
     <Card sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', boxShadow: 'none', border: 'none' }}>
       <CardMedia
         component="img"
-        sx={{ height: '100%', width: '100%', objectFit: 'cover', padding: '25px' }}
+        sx={{ height: '100%', width: '100%', objectFit: 'contain', padding: '25px' }}
         image={product.imageUrl}
         alt={product.name}
       />
