@@ -13,7 +13,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://${config.SERVER_IP}:${config.PORT}`,
+        url: `https://${config.SERVER_IP}:${config.PORT}`,
       },
     ],
     components: {
