@@ -7,6 +7,7 @@ const cors = require('cors');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 
 const options = {
   key: fs.readFileSync('/etc/letsencrypt/live/pluswibe.space/privkey.pem'),
@@ -37,6 +38,11 @@ app.use((req, res, next) => {
     }
   }
   next();
+});
+
+app.use(express.static(path.join(__dirname, '../client/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
 // Подключение маршрутов
