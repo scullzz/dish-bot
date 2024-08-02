@@ -73,18 +73,15 @@ router.post('/', async (req, res) => {
   try {
     const order = await prisma.order.create({
       data: {
-        tgUserId: BigInt(user_id),
+        tgUserId: user_id,
         status: 'processing',
         locationUrl: locationUrl,
         phoneNumber: phoneNumber,
         orderItems: {
-          create: items.map(item => ({
-            product: { connect: { id: parseInt(item.product_id) } },
-            quantity: item.quantity
-          }))
+          create: items
         },
         user: {
-          connect: { telegramId: BigInt(user_id) }
+          connect: { telegramId: user_id }
         }
       },
     });
