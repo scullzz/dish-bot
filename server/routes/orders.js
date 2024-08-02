@@ -67,23 +67,25 @@ const prisma = require('../prisma');
  */
 router.post('/', async (req, res) => {
   const { user_id, items, locationUrl, phoneNumber } = req.body;
+  console.log('Запрос POST на /api/orders с телом:', req.body);
   try {
     const order = await prisma.order.create({
       data: {
-        userId: user_id,
+        tgUserId: parseInt(user_id),
         status: 'processing',
         locationUrl: locationUrl,
         phoneNumber: phoneNumber,
         orderItems: {
           create: items.map(item => ({
-            productId: item.product_id,
-            quantity: item.quantity,
+            productId: parseInt(item.product_id),
+            quantity: parseInt(item.quantity),
           })),
         },
       },
     });
     res.json({ success: true, order_id: order.id });
   } catch (error) {
+    console.error('Ошибка при создании заказа:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -113,6 +115,7 @@ router.post('/', async (req, res) => {
  */
 router.get('/:order_id', async (req, res) => {
   const { order_id } = req.params;
+  // console.log(`Запрос GET на /api/orders/${order_id}`);
   try {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(order_id) },
@@ -120,6 +123,7 @@ router.get('/:order_id', async (req, res) => {
     });
     res.json(order);
   } catch (error) {
+    console.error('Ошибка при получении заказа:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
