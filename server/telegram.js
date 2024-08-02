@@ -47,13 +47,20 @@ bot.sendOrderConfirmation = async (userId, order) => {
     }
 
     const chatId = BigInt(user.telegramId);
-    const orderItems = order.orderItems.map(item => `${item.quantity} x ${item.product.name}`).join('\n');
-    const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nСпасибо за ваш заказ!`;
+    let totalCost = 0;
+    const orderItems = order.orderItems.map(item => {
+      const itemCost = item.quantity * item.product.price;
+      totalCost += itemCost;
+      return `${item.quantity} x ${item.product.name} (₽${item.product.price} за единицу) - ₽${itemCost}`;
+    }).join('\n');
+
+    const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nОбщая стоимость: ₽${totalCost}\n\nСпасибо за ваш заказ!`;
 
     await bot.sendMessage(chatId, message);
   } catch (error) {
     console.error('Ошибка при отправке подтверждения заказа:', error);
   }
 };
+
 
 module.exports = bot;
