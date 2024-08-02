@@ -43,6 +43,7 @@ model Order {
   createdAt    DateTime  @default(now())
   locationUrl  String
   phoneNumber  String
+  description  String?
   orderItems   OrderItem[]
 }
 
