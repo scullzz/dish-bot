@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Order = () => {
+     
   const initData = window.Telegram.WebApp.initData;
 
   const nav = useNavigate();
