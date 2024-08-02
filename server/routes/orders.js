@@ -73,15 +73,17 @@ router.post('/', async (req, res) => {
   try {
     const order = await prisma.order.create({
       data: {
-        tgUserId: user_id,
+        user: {
+          connect: { telegramId: BigInt(user_id) }
+        },
         status: 'processing',
         locationUrl: locationUrl,
         phoneNumber: phoneNumber,
         orderItems: {
-          create: items
-        },
-        user: {
-          connect: { telegramId: user_id }
+          create: items.map(item => ({
+            product: { connect: { id: item.product_id } },
+            quantity: item.quantity
+          }))
         }
       },
     });
@@ -91,6 +93,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 /**
  * @swagger
