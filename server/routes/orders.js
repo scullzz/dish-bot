@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
   try {
     const order = await prisma.order.create({
       data: {
-        tgUserId: parseInt(user_id),
+        tgUserId: user_id,
         status: 'processing',
         locationUrl: locationUrl,
         phoneNumber: phoneNumber,
