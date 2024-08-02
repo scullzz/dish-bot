@@ -121,14 +121,9 @@ router.post('/', async (req, res) => {
 router.get('/:order_id', async (req, res) => {
   const { order_id } = req.params;
   try {
-    const order = await prisma.order.findUnique(
+    const order = await prisma.orderItem.findMany(
       {
-        data: {
-          orderItems: {
-            connect: { order_id: parseInt(order_id) }
-          },
-        },
-        include: {user: true}
+        where: {orderId: parseInt(order_id)}
       }
     )
     res.json(order);
