@@ -34,4 +34,26 @@ bot.on('message', (msg) => {
   const chatId = msg.chat.id;
 });
 
+// Функция для отправки подтверждения заказа
+bot.sendOrderConfirmation = async (userId, order) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { telegramId: BigInt(userId) }
+    });
+
+    if (!user) {
+      console.error('Пользователь не найден');
+      return;
+    }
+
+    const chatId = parseInt(user.telegramId);
+    const orderItems = order.orderItems.map(item => `${item.quantity} x ${item.product.name}`).join('\n');
+    const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nСпасибо за ваш заказ!`;
+
+    await bot.sendMessage(chatId, message);
+  } catch (error) {
+    console.error('Ошибка при отправке подтверждения заказа:', error);
+  }
+};
+
 module.exports = bot;

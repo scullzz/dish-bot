@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../prisma');
+const bot = require('../telegram');
 
 // Функция для преобразования BigInt и Date в строки в объекте
 const transformBigIntAndDateToString = (obj) => {
@@ -105,6 +106,10 @@ router.post('/', async (req, res) => {
         }
       },
     });
+
+    // Отправляем сообщение в Telegram
+    await bot.sendOrderConfirmation(user_id, order);
+
     res.json({ success: true, order_id: order.id });
   } catch (error) {
     console.error('Ошибка при создании заказа:', error);
