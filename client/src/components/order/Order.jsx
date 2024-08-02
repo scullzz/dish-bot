@@ -10,13 +10,15 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Order = () => {
-  const initData = window.Telegram.WebApp.initData;
-
   const nav = useNavigate();
   const list = useSelector((item) => item.items.list);
   const totalPrice = useSelector((item) => item.items.price);
   const orderList = useSelector((item) => item.items.orderList);
   const dispatch = useDispatch();
+  useEffect(() => {
+    const initData = window.Telegram.WebApp.initData;
+    alert(initData?.id)
+  }, [initData]);
 
   const MakeOrder = async () => {
     alert(initData?.id);
