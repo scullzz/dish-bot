@@ -106,6 +106,9 @@ router.post('/', async (req, res) => {
         }
       },
     });
+
+    await bot.sendOrderConfirmation(user_id, order);
+
     res.json({ success: true, order_id: order.id });
   } catch (error) {
     console.error('Ошибка при создании заказа:', error);
