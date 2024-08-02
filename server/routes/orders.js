@@ -123,7 +123,7 @@ router.get('/:order_id', async (req, res) => {
   // console.log(`Запрос GET на /api/orders/${order_id}`);
   try {
     const order = await prisma.order.findUnique({
-      where: { id: BigInt(order_id) },
+      where: { id: parseInt(order_id) },
       include: { orderItems: true },
     });
     res.json(order);
