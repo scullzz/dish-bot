@@ -156,13 +156,7 @@ router.get('/:order_id', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Order not found' });
     }
 
-    // Выводим данные заказа перед преобразованием
-    console.log('Order before transformation:', JSON.stringify(order, null, 2));
-
     const transformedOrder = transformBigIntAndDateToString(order);
-
-    // Выводим данные заказа после преобразования
-    console.log('Order after transformation:', JSON.stringify(transformedOrder, null, 2));
 
     res.json(transformedOrder);
   } catch (error) {
