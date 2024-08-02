@@ -2,17 +2,20 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../prisma');
 
-// Функция для преобразования BigInt в строку в объекте
-const transformBigIntToString = (obj) => {
+// Функция для преобразования BigInt и Date в строки в объекте
+const transformBigIntAndDateToString = (obj) => {
   if (typeof obj === 'bigint') {
     return obj.toString();
   }
+  if (obj instanceof Date) {
+    return obj.toISOString();
+  }
   if (Array.isArray(obj)) {
-    return obj.map(transformBigIntToString);
+    return obj.map(transformBigIntAndDateToString);
   }
   if (obj !== null && typeof obj === 'object') {
     return Object.keys(obj).reduce((acc, key) => {
-      acc[key] = transformBigIntToString(obj[key]);
+      acc[key] = transformBigIntAndDateToString(obj[key]);
       return acc;
     }, {});
   }
@@ -151,13 +154,14 @@ router.get('/:order_id', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Order not found' });
     }
 
-    const transformedOrder = transformBigIntToString(order);
+    const transformedOrder = transformBigIntAndDateToString(order);
     res.json(transformedOrder);
   } catch (error) {
     console.error('Ошибка при получении заказа:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 
 module.exports = router;
