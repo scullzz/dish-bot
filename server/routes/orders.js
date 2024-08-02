@@ -121,10 +121,12 @@ router.post('/', async (req, res) => {
 router.get('/:order_id', async (req, res) => {
   const { order_id } = req.params;
   try {
-    const order = await prisma.order.findUnique({
-      where: { id: parseInt(order_id) },
-      include: { orderItems: true, user: true },
-    });
+    const order = await prisma.order.findUnique(
+      {
+        where: {id: parseInt(order_id)},
+        include: {orderItems: true, user: true},
+      }
+    )
     res.json(order);
   } catch (error) {
     console.error('Ошибка при получении заказа:', error);
