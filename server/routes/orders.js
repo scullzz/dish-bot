@@ -127,10 +127,8 @@ router.get('/:order_id', async (req, res) => {
           orderItems: {
             connect: { order_id: parseInt(order_id) }
           },
-          user: {
-            connect: { telegramId: BigInt(user_id) }
-          }
-        }
+        },
+        include: {user: true}
       }
     )
     res.json(order);
