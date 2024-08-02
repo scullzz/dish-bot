@@ -78,8 +78,14 @@ router.post('/', async (req, res) => {
         locationUrl: locationUrl,
         phoneNumber: phoneNumber,
         orderItems: {
-          create: items
+          create: items.map(item => ({
+            product: { connect: { id: item.product_id } },
+            quantity: item.quantity
+          }))
         },
+        user: {
+          connect: { telegramId: user_id }
+        }
       },
     });
     res.json({ success: true, order_id: order.id });
