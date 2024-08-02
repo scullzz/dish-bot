@@ -124,13 +124,36 @@ router.get('/:order_id', async (req, res) => {
   try {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(order_id) },
-      include: { orderItems: true },
+      include: { 
+        orderItems: {
+          include: {
+            product: true
+          }
+        },
+        user: true
+      },
     });
-    res.json(order);
+
+    // Преобразуем BigInt в строку
+    const transformedOrder = {
+      ...order,
+      userId: order.userId.toString(),
+      orderItems: order.orderItems.map(item => ({
+        ...item,
+        productId: item.productId.toString(),
+      })),
+      user: {
+        ...order.user,
+        telegramId: order.user.telegramId.toString()
+      }
+    };
+
+    res.json(transformedOrder);
   } catch (error) {
     console.error('Ошибка при получении заказа:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 module.exports = router;
