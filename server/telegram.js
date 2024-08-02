@@ -51,7 +51,7 @@ bot.sendOrderConfirmation = async (userId, order) => {
     const orderItems = order.orderItems.map(item => {
       const itemCost = item.quantity * item.product.price;
       totalCost += itemCost;
-      return `${item.quantity} x ${item.product.name} (${item.product.price}сум x 1) - ${itemCost}сум`;
+      return `${item.quantity} x ${item.product.name} - ${itemCost}сум`;
     }).join('\n');
 
     const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nОбщая стоимость: ${totalCost}сум\n\nСпасибо за ваш заказ!`;
