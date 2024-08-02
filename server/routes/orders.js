@@ -76,7 +76,10 @@ router.post('/', async (req, res) => {
         locationUrl: locationUrl,
         phoneNumber: phoneNumber,
         orderItems: {
-          create: items,
+          create: items.map(item => ({
+            productId: parseInt(item.product_id),
+            quantity: parseInt(item.quantity),
+          })),
         },
       },
     });
