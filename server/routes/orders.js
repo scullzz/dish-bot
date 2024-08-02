@@ -157,12 +157,12 @@ router.get('/:order_id', async (req, res) => {
     }
 
     // Выводим данные заказа перед преобразованием
-    console.log('Order before transformation:', order);
+    console.log('Order before transformation:', JSON.stringify(order, null, 2));
 
     const transformedOrder = transformBigIntAndDateToString(order);
 
     // Выводим данные заказа после преобразования
-    console.log('Order after transformation:', transformedOrder);
+    console.log('Order after transformation:', JSON.stringify(transformedOrder, null, 2));
 
     res.json(transformedOrder);
   } catch (error) {
