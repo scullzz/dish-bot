@@ -67,9 +67,6 @@ const prisma = require('../prisma');
  */
 router.post('/', async (req, res) => {
   const { user_id, items, locationUrl, phoneNumber } = req.body;
-  console.log('Запрос POST на /api/orders с телом:', req.body);
-  console.log(`${items}`);
-
   try {
     const order = await prisma.order.create({
       data: {
@@ -121,10 +118,10 @@ router.post('/', async (req, res) => {
 router.get('/:order_id', async (req, res) => {
   const { order_id } = req.params;
   try {
-    const order = await prisma.orderItem.findMany(
+    const order = await prisma.order.findUnique(
       {
-        where: {orderId: parseInt(order_id)},
-        include:{order: true, product: true}
+        where: {id: parseInt(order_id)},
+        include:{orderItems: true}
       }
     )
     res.json(order);
