@@ -8,26 +8,27 @@ generator client {
 }
 
 model User {
-  telegramId BigInt   @unique
-  name       String
+  telegramId  BigInt  @unique
+  name        String
+  phoneNumber String?
 
-  orders     Order[]
+  orders Order[]
 }
 
 model Product {
-  id          Int       @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String?
   price       Float
   imageUrl    String?
 
-  categoryId  Int
-  categoryInfo    Category @relation(fields: [categoryId], references: [id])
-  orderItems  OrderItem[]
+  categoryId   Int
+  categoryInfo Category    @relation(fields: [categoryId], references: [id])
+  orderItems   OrderItem[]
 }
 
 model Category {
-  id       Int       @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   name     String
   imageUrl String
 
@@ -35,15 +36,15 @@ model Category {
 }
 
 model Order {
-  id           Int       @id @default(autoincrement())
-  tgUserId     BigInt
-  user         User      @relation(fields: [tgUserId], references: [telegramId])
-  status       String
-  createdAt    DateTime  @default(now())
-  locationUrl  String
-  phoneNumber  String
-  description  String?
-  orderItems   OrderItem[]
+  id          Int         @id @default(autoincrement())
+  tgUserId    BigInt
+  user        User        @relation(fields: [tgUserId], references: [telegramId])
+  status      String
+  createdAt   DateTime    @default(now())
+  locationUrl String
+  phoneNumber String
+  description String?
+  orderItems  OrderItem[]
 }
 
 model OrderItem {
