@@ -89,6 +89,11 @@ const transformBigIntAndDateToString = (obj) => {
  */
 router.post('/', async (req, res) => {
   const { user_id, items, locationUrl, phoneNumber } = req.body;
+
+  if (!user_id) {
+    return res.status(400).json({ success: false, error: 'User ID is required' });
+  }
+
   try {
     const order = await prisma.order.create({
       data: {
@@ -147,7 +152,7 @@ router.get('/:order_id', async (req, res) => {
   try {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(order_id) },
-      include: { 
+      include: {
         orderItems: {
           include: {
             product: true
