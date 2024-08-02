@@ -51,10 +51,10 @@ bot.sendOrderConfirmation = async (userId, order) => {
     const orderItems = order.orderItems.map(item => {
       const itemCost = item.quantity * item.product.price;
       totalCost += itemCost;
-      return `${item.quantity} x ${item.product.name} (₽${item.product.price} за единицу) - ₽${itemCost}`;
+      return `${item.quantity} x ${item.product.name} (${item.product.price}сум x 1) - ${itemCost}сум`;
     }).join('\n');
 
-    const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nОбщая стоимость: ₽${totalCost}\n\nСпасибо за ваш заказ!`;
+    const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nОбщая стоимость: ${totalCost}сум\n\nСпасибо за ваш заказ!`;
 
     await bot.sendMessage(chatId, message);
   } catch (error) {
