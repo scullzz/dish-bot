@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./style.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,20 +10,25 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Order = () => {
-     
-  const initData = window.Telegram.WebApp.initData;
+  const tg = window.Telegram.WebApp;
 
   const nav = useNavigate();
+  const [userData, setUserData] = useState({});
   const list = useSelector((item) => item.items.list);
   const totalPrice = useSelector((item) => item.items.price);
   const orderList = useSelector((item) => item.items.orderList);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const data = tg.initDataUnsafe?.user;
+    setUserData(data);
+  }, []);
+
   const MakeOrder = async () => {
-    alert(initData?.id);
+    alert(userData?.id);
     try {
       const orderData = {
-        user_id: initData?.id,
+        user_id: userData?.id,
         items: orderList,
         locationUrl: "blabla",
         phoneNumber: "123123123",
