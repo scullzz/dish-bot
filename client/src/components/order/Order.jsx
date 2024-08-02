@@ -49,7 +49,7 @@ const Order = () => {
   const MakeOrder = async () => {
         try {
           const orderData = {
-            user_id: userData?.id,
+            user_id: parseInt(userData?.id),
             items: orderList,
             locationUrl: "blabla",
             phoneNumber: "123123123",
