@@ -14,10 +14,10 @@ bot.onText(/\/start/, async (msg) => {
 
   try {
     const user = await prisma.user.upsert({
-      where: { telegramId: BigInt(telegramId) },
-      update: { name },
+      where: { telegramId: BigInt(telegramId) }, 
+      update: { name },                          
       create: { telegramId: BigInt(telegramId), name },
-    });
+    });    
     await bot.sendMessage(chatId, 'Добро пожаловать в наш сервис доставки еды!', {
       reply_markup: {
         inline_keyboard: [
