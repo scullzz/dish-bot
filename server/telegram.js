@@ -46,7 +46,7 @@ bot.sendOrderConfirmation = async (userId, order) => {
       return;
     }
 
-    const chatId = parseInt(user.telegramId);
+    const chatId = BigInt(user.telegramId);
     const orderItems = order.orderItems.map(item => `${item.quantity} x ${item.product.name}`).join('\n');
     const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nСпасибо за ваш заказ!`;
 
