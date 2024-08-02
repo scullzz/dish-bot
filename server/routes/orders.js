@@ -22,6 +22,7 @@ const transformBigIntAndDateToString = (obj) => {
   return obj;
 };
 
+
 /**
  * @swagger
  * tags:
@@ -135,6 +136,7 @@ router.post('/', async (req, res) => {
  *       500:
  *         description: Внутренняя ошибка сервера
  */
+
 router.get('/:order_id', async (req, res) => {
   const { order_id } = req.params;
   try {
@@ -154,14 +156,19 @@ router.get('/:order_id', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Order not found' });
     }
 
+    // Выводим данные заказа перед преобразованием
+    console.log('Order before transformation:', order);
+
     const transformedOrder = transformBigIntAndDateToString(order);
+
+    // Выводим данные заказа после преобразования
+    console.log('Order after transformation:', transformedOrder);
+
     res.json(transformedOrder);
   } catch (error) {
     console.error('Ошибка при получении заказа:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
-
-
 
 module.exports = router;
