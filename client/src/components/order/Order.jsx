@@ -10,6 +10,8 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Order = () => {
+  const initData = window.Telegram.WebApp.initData;
+
   const nav = useNavigate();
   const list = useSelector((item) => item.items.list);
   const totalPrice = useSelector((item) => item.items.price);
@@ -17,16 +19,17 @@ const Order = () => {
   const dispatch = useDispatch();
 
   const MakeOrder = async () => {
+    alert(initData?.id);
     try {
       const orderData = {
-        user_id:  123,
+        user_id: initData?.id,
         items: orderList,
         locationUrl: "blabla",
         phoneNumber: "123123123",
       };
-  
+
       console.log("Sending order data:", orderData);
-  
+
       const response = await fetch("https://pluswibe.space/api/orders", {
         method: "POST",
         headers: {
@@ -34,7 +37,7 @@ const Order = () => {
         },
         body: JSON.stringify(orderData),
       });
-  
+
       if (response.ok) {
         alert("Order placed successfully!");
         ClearShopCart();

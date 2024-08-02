@@ -1,9 +1,15 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Typography, Box, Button } from '@mui/material';
-import ProductCard from '../ProductCard/ProductCard';
-import { addItem, increase, decrease, deleteItem, clearCart } from '../../slice/itemsSlice';
-import { selectProductCounts, selectTotalPrice } from '../../slice/selectors';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Grid, Typography, Box, Button } from "@mui/material";
+import ProductCard from "../ProductCard/ProductCard";
+import {
+  addItem,
+  increase,
+  decrease,
+  deleteItem,
+  clearCart,
+} from "../../slice/itemsSlice";
+import { selectProductCounts, selectTotalPrice } from "../../slice/selectors";
 
 const ProductGrid = ({ category }) => {
   const dispatch = useDispatch();
@@ -31,8 +37,12 @@ const ProductGrid = ({ category }) => {
   };
 
   return (
-    <Box>
-      <Typography variant="h4" component="h2" sx={{ margin: 2, fontWeight: 600 }}>
+    <Box sx={{ backgroundColor: "white" }}>
+      <Typography
+        variant="h4"
+        component="h2"
+        sx={{ margin: 2, fontWeight: 600 }}
+      >
         {category.name}
       </Typography>
       <Grid container spacing={2}>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Header from '../Header/Header';
 import ProductGrid from '../ProductGrid/ProductGrid';
 import ShoppingCart from '../ShoppingCart/ShoppingCart';
+import { pink } from '@mui/material/colors';
 
 const App = () => {
   const [categories, setCategories] = useState([]);
@@ -68,9 +69,9 @@ const App = () => {
   return (
     <div>
       <Header ref={headerRef} selectedCategory={selectedCategory} onCategoryClick={handleCategoryClick} />
-      <div style={{ paddingTop: headerRef.current ? headerRef.current.clientHeight : '100px' }}></div>
+      <div style={{ paddingTop: headerRef.current ? headerRef.current.clientHeight : '100px'}}></div>
       {categories.map((category) => (
-        <div key={category.id} id={`category-${category.id}`} style={{ paddingTop: '0px' }}>
+        <div key={category.id} id={`category-${category.id}`} style={{ paddingTop: '0px', backgroundColor: 'white' }}>
           <ProductGrid category={category} onAddToCart={handleAddToCart} onRemoveFromCart={handleRemoveFromCart} />
         </div>
       ))}
