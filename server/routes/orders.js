@@ -68,7 +68,8 @@ const prisma = require('../prisma');
 router.post('/', async (req, res) => {
   const { user_id, items, locationUrl, phoneNumber } = req.body;
   console.log('Запрос POST на /api/orders с телом:', req.body);
-  console.log(items);
+  console.log(`${items}`);
+
   try {
     const order = await prisma.order.create({
       data: {
