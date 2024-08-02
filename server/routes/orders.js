@@ -123,7 +123,8 @@ router.get('/:order_id', async (req, res) => {
   try {
     const order = await prisma.orderItem.findMany(
       {
-        where: {orderId: parseInt(order_id)}
+        where: {orderId: parseInt(order_id)},
+        include:{order: true, product: true}
       }
     )
     res.json(order);
