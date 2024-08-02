@@ -124,7 +124,7 @@ router.get('/:order_id', async (req, res) => {
   try {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(order_id) },
-      include: { 
+      include: {
         orderItems: {
           include: {
             product: true
@@ -134,18 +134,22 @@ router.get('/:order_id', async (req, res) => {
       },
     });
 
-    // Преобразуем BigInt в строку
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Order not found' });
+    }
+
+    // Преобразуем BigInt в строку, если поле существует
     const transformedOrder = {
       ...order,
-      userId: order.userId.toString(),
+      userId: order.userId ? order.userId.toString() : null,
       orderItems: order.orderItems.map(item => ({
         ...item,
-        productId: item.productId.toString(),
+        productId: item.productId ? item.productId.toString() : null,
       })),
-      user: {
+      user: order.user ? {
         ...order.user,
-        telegramId: order.user.telegramId.toString()
-      }
+        telegramId: order.user.telegramId ? order.user.telegramId.toString() : null
+      } : null
     };
 
     res.json(transformedOrder);
