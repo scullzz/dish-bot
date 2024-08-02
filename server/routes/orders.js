@@ -120,44 +120,16 @@ router.post('/', async (req, res) => {
  */
 router.get('/:order_id', async (req, res) => {
   const { order_id } = req.params;
-  // console.log(`Запрос GET на /api/orders/${order_id}`);
   try {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(order_id) },
-      include: {
-        orderItems: {
-          include: {
-            product: true
-          }
-        },
-        user: true
-      },
+      include: { orderItems: true, user: true },
     });
-
-    if (!order) {
-      return res.status(404).json({ success: false, error: 'Order not found' });
-    }
-
-    // Преобразуем BigInt в строку, если поле существует
-    const transformedOrder = {
-      ...order,
-      userId: order.userId ? order.userId.toString() : null,
-      orderItems: order.orderItems.map(item => ({
-        ...item,
-        productId: item.productId ? item.productId.toString() : null,
-      })),
-      user: order.user ? {
-        ...order.user,
-        telegramId: order.user.telegramId ? order.user.telegramId.toString() : null
-      } : null
-    };
-
-    res.json(transformedOrder);
+    res.json(order);
   } catch (error) {
     console.error('Ошибка при получении заказа:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
-
 
 module.exports = router;
