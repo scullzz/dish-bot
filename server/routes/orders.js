@@ -105,6 +105,13 @@ router.post('/', async (req, res) => {
           }))
         }
       },
+      include: {  // Включение orderItems в возвращаемый объект
+        orderItems: {
+          include: {
+            product: true  // Включение информации о продукте
+          }
+        }
+      }
     });
 
     await bot.sendOrderConfirmation(user_id, order);
@@ -115,6 +122,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 
 /**
