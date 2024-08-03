@@ -23,7 +23,7 @@ bot.onText(/\/start/, async (msg) => {
             request_contact: true
           }]
         ],
-        // resize_keyboard: true
+        resize_keyboard: true
       }
     });
 
@@ -43,7 +43,8 @@ bot.onText(/\/start/, async (msg) => {
             keyboard: [
               [{ text: 'Добро пожаловать!' }]
             ],
-            remove_keyboard: true
+            remove_keyboard: true,
+            resize_keyboard: true
           }
         });
 
@@ -97,7 +98,7 @@ bot.sendOrderConfirmation = async (userId, order) => {
             request_location: true
           }]
         ],
-        // resize_keyboard: true
+        resize_keyboard: true,
       }
     });
 
@@ -118,6 +119,7 @@ bot.sendOrderConfirmation = async (userId, order) => {
             keyboard: [
               [{ text: 'Хорошего Вам дня !' }]
             ],
+            resize_keyboard: true
           }
         });
 
@@ -127,7 +129,7 @@ bot.sendOrderConfirmation = async (userId, order) => {
           reply_markup: {
             remove_keyboard: true,
             inline_keyboard: [
-              [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
+              [{ text: 'Начать новый заказ', web_app: { url: webAppUrl } }]
             ],
           }
         });
