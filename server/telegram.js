@@ -41,7 +41,7 @@ bot.onText(/\/start/, async (msg) => {
         await bot.sendMessage(chatId, 'Спасибо! Ваш контакт успешно сохранен.', {
           reply_markup: {
             keyboard: [
-              [{text: ' '}]
+              [{ text: 'Добро пожаловать!' }]
             ],
             remove_keyboard: true
           }
@@ -50,7 +50,7 @@ bot.onText(/\/start/, async (msg) => {
         await bot.sendMessage(chatId, 'Теперь вы можете сделать заказ!', {
           reply_markup: {
             inline_keyboard: [
-              [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
+              [{ text: 'Сделать заказ', web_app: { url: webAppUrl } }]
             ],
             remove_keyboard: true
           }
@@ -113,10 +113,12 @@ bot.sendOrderConfirmation = async (userId, order) => {
           data: { locationUrl: locationUrl },
         });
 
-        await bot.sendMessage(chatId, 'Спасибо! Ваша локация получена.',{
-          keyboard: [
-            [{text: ' '}]
-          ],
+        await bot.sendMessage(chatId, 'Спасибо! Ваша локация получена.', {
+          reply_markup:{
+            keyboard: [
+              [{ text: 'Хорошего Вам дня !' }]
+            ],
+          }
         });
 
         // Отправка подтверждения заказа
