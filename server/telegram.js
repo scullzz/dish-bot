@@ -120,6 +120,9 @@ bot.sendOrderConfirmation = async (userId, order) => {
             inline_keyboard: [
               [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
             ],
+            keyboard: [
+              [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
+            ]
           }
         });
       }
