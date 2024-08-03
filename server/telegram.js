@@ -49,6 +49,9 @@ bot.onText(/\/start/, async (msg) => {
             inline_keyboard: [
               [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
             ],
+            keyboard: [
+              [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
+            ],
             remove_keyboard: true
           }
         });
