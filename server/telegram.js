@@ -111,12 +111,19 @@ bot.sendOrderConfirmation = async (userId, order) => {
         });
 
         await bot.sendMessage(chatId, 'Спасибо! Ваша локация получена.');
+
+        // Отправка подтверждения заказа
+        const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nОбщая стоимость: ${totalCost}сум\n\nВаш заказ будет доставлен по адресу: ${locationUrl} в течение примерно 25 минут. Спасибо за ваш заказ!`;
+        await bot.sendMessage(chatId, message, {
+          reply_markup: {
+            remove_keyboard: true,
+            inline_keyboard: [
+              [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
+            ],
+          }
+        });
       }
     });
-
-    const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nОбщая стоимость: ${totalCost}сум\n\nСпасибо за ваш заказ!`;
-
-    await bot.sendMessage(chatId, message);
 
   } catch (error) {
     console.error('Ошибка при отправке подтверждения заказа:', error);
