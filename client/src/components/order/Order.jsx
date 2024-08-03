@@ -47,37 +47,37 @@ const Order = () => {
   };
 
   const MakeOrder = async () => {
-        try {
-          const orderData = {
-            user_id: userData?.id,
-            items: orderList,
-            locationUrl: "blabla",
-            phoneNumber: "123123123",
-          };
+    try {
+      const orderData = {
+        user_id: userData?.id,
+        items: orderList,
+        locationUrl: "blabla",
+        phoneNumber: "123123123",
+      };
 
-          console.log("Sending order data:", orderData);
+      console.log("Sending order data:", orderData);
 
-          const response = await fetch("https://pluswibe.space/api/orders", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(orderData),
-          });
+      const response = await fetch("https://pluswibe.space/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
 
-          if (response.ok) {
-            alert("Order placed successfully!");
-            ClearShopCart();
-            nav("/"); // Navigate to another page if needed
-          } else {
-            const errorData = await response.json();
-            console.error("Order creation failed:", errorData);
-            alert("Failed to place order. Please try again.");
-          }
-        } catch (error) {
-          console.error("Network error:", error);
-          alert("Failed to place order. Please try again.");
-        }
+      if (response.ok) {
+        alert("Order placed successfully!");
+        ClearShopCart();
+        tg.close();
+      } else {
+        const errorData = await response.json();
+        console.error("Order creation failed:", errorData);
+        alert("Failed to place order. Please try again.");
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert("Failed to place order. Please try again.");
+    }
   };
 
   return (
