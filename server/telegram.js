@@ -64,7 +64,7 @@ bot.on('message', (msg) => {
   const chatId = msg.chat.id;
 });
 
-// Функция для отправки подтверждения заказа
+// Функция для отправки подтверждения заказа и запроса локации
 bot.sendOrderConfirmation = async (userId, order) => {
   try {
     const user = await prisma.user.findUnique({
@@ -84,11 +84,43 @@ bot.sendOrderConfirmation = async (userId, order) => {
       return `${item.quantity} x ${item.product.name} - ${itemCost}сум`;
     }).join('\n');
 
+    // Запрос на отправку локации
+    await bot.sendMessage(chatId, 'Пожалуйста, поделитесь своей локацией для доставки.', {
+      reply_markup: {
+        one_time_keyboard: true,
+        keyboard: [
+          [{
+            text: 'Отправить локацию',
+            request_location: true
+          }]
+        ],
+        resize_keyboard: true
+      }
+    });
+
+    // Обработчик для получения локации
+    bot.once('location', async (msg) => {
+      const location = msg.location;
+      if (location) {
+        const locationUrl = `https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
+
+        // Обновление заказа с локацией
+        await prisma.order.update({
+          where: { id: order.id },
+          data: { locationUrl: locationUrl },
+        });
+
+        await bot.sendMessage(chatId, 'Спасибо! Ваша локация получена.');
+      }
+    });
+
     const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nОбщая стоимость: ${totalCost}сум\n\nСпасибо за ваш заказ!`;
 
     await bot.sendMessage(chatId, message);
+
   } catch (error) {
     console.error('Ошибка при отправке подтверждения заказа:', error);
+    await bot.sendMessage(chatId, 'Произошла ошибка при обработке вашего заказа.');
   }
 };
 
