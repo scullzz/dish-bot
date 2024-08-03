@@ -13,18 +13,48 @@ bot.onText(/\/start/, async (msg) => {
   const name = msg.from.first_name;
 
   try {
-    const user = await prisma.user.upsert({
-      where: { telegramId: BigInt(telegramId) }, 
-      update: { name },                          
-      create: { telegramId: BigInt(telegramId), name },
-    });    
-    await bot.sendMessage(chatId, 'Добро пожаловать в наш сервис доставки еды!', {
+    // Сначала запросим контакт пользователя
+    await bot.sendMessage(chatId, 'Пожалуйста, поделитесь своим контактом для продолжения.', {
       reply_markup: {
-        inline_keyboard: [
-          [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
+        one_time_keyboard: true,
+        keyboard: [
+          [{
+            text: 'Отправить контакт',
+            request_contact: true
+          }]
         ],
+        resize_keyboard: true
       }
     });
+
+    // Сохраним пользователя в базу данных
+    const user = await prisma.user.upsert({
+      where: { telegramId: BigInt(telegramId) },
+      update: { name },
+      create: { telegramId: BigInt(telegramId), name },
+    });
+
+    // Дождемся контакта пользователя
+    bot.once('contact', async (msg) => {
+      const contact = msg.contact;
+      if (contact) {
+        await prisma.user.update({
+          where: { telegramId: BigInt(telegramId) },
+          data: { phoneNumber: contact.phone_number },
+        });
+
+        // После получения контакта отправим кнопку "Сделать заказ"
+        await bot.sendMessage(chatId, 'Спасибо! Теперь вы можете сделать заказ.', {
+          reply_markup: {
+            inline_keyboard: [
+              [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
+            ],
+            remove_keyboard: true
+          }
+        });
+      }
+    });
+
   } catch (error) {
     await bot.sendMessage(chatId, 'Произошла ошибка при регистрации.');
   }
@@ -61,6 +91,5 @@ bot.sendOrderConfirmation = async (userId, order) => {
     console.error('Ошибка при отправке подтверждения заказа:', error);
   }
 };
-
 
 module.exports = bot;
