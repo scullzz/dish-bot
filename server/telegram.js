@@ -38,13 +38,19 @@ bot.onText(/\/start/, async (msg) => {
         });
 
         // После получения контакта отправим кнопку "Сделать заказ"
-        await bot.sendMessage(chatId, 'Спасибо! Теперь вы можете сделать заказ.', {
+        await bot.sendMessage(chatId, 'Спасибо! Ваш контакт успешно сохранен.', {
+          reply_markup: {
+            keyboard: [
+              [{text: ' '}]
+            ],
+            remove_keyboard: true
+          }
+        });
+
+        await bot.sendMessage(chatId, 'Теперь вы можете сделать заказ!', {
           reply_markup: {
             inline_keyboard: [
               [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
-            ],
-            keyboard: [
-              [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
             ],
             remove_keyboard: true
           }
@@ -107,7 +113,11 @@ bot.sendOrderConfirmation = async (userId, order) => {
           data: { locationUrl: locationUrl },
         });
 
-        await bot.sendMessage(chatId, 'Спасибо! Ваша локация получена.');
+        await bot.sendMessage(chatId, 'Спасибо! Ваша локация получена.',{
+          keyboard: [
+            [{text: ' '}]
+          ],
+        });
 
         // Отправка подтверждения заказа
         const message = `Ваш заказ был успешно создан!\n\nПредметы заказа:\n${orderItems}\n\nОбщая стоимость: ${totalCost}сум\n\nВаш заказ будет доставлен по адресу: ${locationUrl} в течение примерно 25 минут. Спасибо за ваш заказ!`;
@@ -117,9 +127,6 @@ bot.sendOrderConfirmation = async (userId, order) => {
             inline_keyboard: [
               [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
             ],
-            keyboard: [
-              [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
-            ]
           }
         });
       }
