@@ -23,7 +23,7 @@ bot.onText(/\/start/, async (msg) => {
             request_contact: true
           }]
         ],
-        resize_keyboard: true
+        // resize_keyboard: true
       }
     });
 
@@ -97,7 +97,7 @@ bot.sendOrderConfirmation = async (userId, order) => {
             request_location: true
           }]
         ],
-        resize_keyboard: true
+        // resize_keyboard: true
       }
     });
 
