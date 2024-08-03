@@ -19,6 +19,29 @@ const Order = () => {
   const orderList = useSelector((item) => item.items.orderList);
   const dispatch = useDispatch();
 
+  const getPhoneNumberById = async (id) => {
+    try {
+      const response = await fetch(
+        `https://pluswibe.space/api/user_info/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        alert("Fuck Bot");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     const data = tg.initDataUnsafe?.user;
     setUserData(data);
@@ -48,11 +71,13 @@ const Order = () => {
 
   const MakeOrder = async () => {
     try {
+      const userPhone = await getPhoneNumberById(userData?.id);
+
       const orderData = {
         user_id: userData?.id,
         items: orderList,
         locationUrl: "blabla",
-        phoneNumber: "123123123",
+        phoneNumber: userPhone?.phoneNumber,
       };
 
       console.log("Sending order data:", orderData);
