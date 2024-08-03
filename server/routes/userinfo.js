@@ -14,10 +14,14 @@ router.get('/:user_id', async (req, res) => {
         if (!user_info) {
             return res.status(404).json({ success: false, error: 'User not found' });
         }
-
-        res.json(user_info);
+        const serializedUserInfo = {
+            ...user_info,
+            telegramId: user_info.telegramId.toString()
+        };
+        res.json(serializedUserInfo);
     } catch (error) {
         console.error('Error fetching user info:', error);
+
         res.status(500).json({ success: false, error: error.message });
     }
 });
