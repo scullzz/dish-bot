@@ -13,7 +13,7 @@ bot.onText(/\/start/, async (msg) => {
   const name = msg.from.first_name;
 
   try {
-    // Сначала запросим контакт пользователя
+    // Запросим контакт пользователя только один раз
     await bot.sendMessage(chatId, 'Пожалуйста, поделитесь своим контактом для продолжения.', {
       reply_markup: {
         one_time_keyboard: true,
@@ -27,20 +27,14 @@ bot.onText(/\/start/, async (msg) => {
       }
     });
 
-    // Сохраним пользователя в базу данных
-    const user = await prisma.user.upsert({
-      where: { telegramId: BigInt(telegramId) },
-      update: { name },
-      create: { telegramId: BigInt(telegramId), name },
-    });
-
     // Дождемся контакта пользователя
     bot.once('contact', async (msg) => {
       const contact = msg.contact;
       if (contact) {
-        await prisma.user.update({
+        await prisma.user.upsert({
           where: { telegramId: BigInt(telegramId) },
-          data: { phoneNumber: contact.phone_number },
+          update: { name, phoneNumber: contact.phone_number },
+          create: { telegramId: BigInt(telegramId), name, phoneNumber: contact.phone_number },
         });
 
         // После получения контакта отправим кнопку "Сделать заказ"
@@ -48,9 +42,6 @@ bot.onText(/\/start/, async (msg) => {
           reply_markup: {
             inline_keyboard: [
               [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
-            ],
-            keyboard: [
-              [{ text: 'Начать заказ', web_app: { url: webAppUrl } }]
             ],
             remove_keyboard: true
           }
@@ -87,7 +78,7 @@ bot.sendOrderConfirmation = async (userId, order) => {
       return `${item.quantity} x ${item.product.name} - ${itemCost}сум`;
     }).join('\n');
 
-    // Запрос на отправку локации
+    // Запрос на отправку локации после оформления заказа
     await bot.sendMessage(chatId, 'Пожалуйста, поделитесь своей локацией для доставки.', {
       reply_markup: {
         one_time_keyboard: true,
