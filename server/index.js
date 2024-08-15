@@ -8,6 +8,8 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const redisClient = require('./redisClient');
+const logger = require('./logger');
 
 const options = {
   key: fs.readFileSync('/etc/letsencrypt/live/pluswibe.space/privkey.pem'),
@@ -69,59 +71,31 @@ http.createServer((req, res) => {
 });
 
 
-// const express = require('express');
-// const bodyParser = require('body-parser');
-// const crypto = require('crypto');
-// const config = require('./config');
-// const telegramBot = require('./telegram');
-// const cors = require('cors');
+// Пример использования логгера
+app.use((req, res, next) => {
+  logger.info(`Запрос: ${req.method} ${req.url}`);
+  next();
+});
 
-// const https = require('https')
-// const http = require('http')
-// const fs = require('fs')
+// Пример использования Redis
+app.get('/cached-data', async (req, res) => {
+  const key = 'someKey';
+  redisClient.get(key, (err, data) => {
+    if (err) {
+      logger.error('Ошибка получения данных из Redis:', err);
+      return res.status(500).send('Ошибка сервера');
+    }
+    
+    if (data) {
+      logger.info('Данные получены из кэша Redis');
+      return res.json(JSON.parse(data));
+    } else {
+      const newData = { /* ваши данные */ };
+      redisClient.setex(key, 3600, JSON.stringify(newData));
+      logger.info('Данные сохранены в кэш Redis');
+      return res.json(newData);
+    }
+  });
+});
 
-// const options = {
-//   key: fs.readFileSync('/etc/letsencrypt/live/pluswibe.space/privkey.pem'),
-//   cert: fs.readFileSync('/etc/letsencrypt/live/pluswibe.space/fullchain.pem')
-// };
-
-// const { swaggerUi, specs } = require('./swagger');
-// const { env } = require('process');
-
-// const corsOptions = {
-//   // origin: 'http://' + config.SERVER_IP + '/',
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-// };
-
-// const app = express();
-// app.use(cors(corsOptions));
-// app.use(bodyParser.json());
-
-// // Middleware для проверки пользователей Telegram
-// app.use((req, res, next) => {
-//   const initData = req.body.initData;
-//   if (initData) {
-//     const hash = crypto.createHmac('sha256', config.SECRET_KEY)
-//       .update(initData)
-//       .digest('hex');
-//     if (hash !== req.body.hash) {
-//       return res.status(403).json({ error: 'Forbidden' });
-//     }
-//   }
-//   next();
-// });
-
-// // Подключение маршрутов
-// app.use('/api/auth', require('./routes/auth'));
-// app.use('/api/products', require('./routes/products'));
-// app.use('/api/orders', require('./routes/orders'));
-// app.use('/api/categories', require('./routes/categories'));
-
-// // Настройка Swagger
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-// // Запуск сервера
-// app.listen(config.PORT, () => {
-//   console.log(`Server is running on port ${config.PORT}`);
-// });
+// Ваши остальные маршруты и логика
